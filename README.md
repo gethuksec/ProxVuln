@@ -9,7 +9,7 @@
 ```bash
 # Clone & Install
 git clone https://github.com/gethuksec/ProxVuln.git
-cd worksheet-vulnerability-management
+cd ProxVuln
 npm install
 
 # Run
