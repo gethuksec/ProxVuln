@@ -73,7 +73,7 @@ export function calculateWorkbookStats(vulnerabilities: Vulnerability[]): {
   const statusDistribution: Record<MitigationStatus, number> = {
     Open: 0,
     Closed: 0,
-    "In Progress": 0,
+    Parsial: 0,
   };
 
   let totalRiskReduction = 0;
@@ -106,12 +106,10 @@ export function calculateWorkbookStats(vulnerabilities: Vulnerability[]): {
     const status = vuln.retest1?.trim().toLowerCase() || vuln.statusMitigasi?.trim().toLowerCase() || "";
     if (status === "closed") {
       statusDistribution.Closed++;
-    } else if (status.includes("proses") || status.includes("progress") || status === "open") {
-      if (status === "open") {
-        statusDistribution.Open++;
-      } else {
-        statusDistribution["In Progress"]++;
-      }
+    } else if (status.includes("parsial") || status.includes("partial") || status.includes("proses") || status.includes("progress")) {
+      statusDistribution.Parsial++;
+    } else if (status === "open") {
+      statusDistribution.Open++;
     } else {
       statusDistribution.Open++;
     }

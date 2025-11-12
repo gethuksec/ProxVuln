@@ -159,7 +159,7 @@ export function generateWorkbookPDF(workbook: WorkbookData): void {
   
   const criticalHighCount = (workbook.riskDistribution.Critical || 0) + (workbook.riskDistribution.High || 0);
   const closedCount = workbook.statusDistribution.Closed || 0;
-  const inProgressCount = workbook.statusDistribution["In Progress"] || 0;
+  const inProgressCount = workbook.statusDistribution["Parsial"] || 0;
   const openCount = workbook.statusDistribution.Open || 0;
   
   // Paragraph 1: Introduction
@@ -204,7 +204,7 @@ export function generateWorkbookPDF(workbook: WorkbookData): void {
     statusParts.push(`${closedCount} vulnerabilities telah berhasil ditutup (Closed)`);
   }
   if (inProgressCount > 0) {
-    statusParts.push(`${inProgressCount} vulnerabilities sedang dalam proses remediasi (In Progress)`);
+    statusParts.push(`${inProgressCount} vulnerabilities sedang dalam proses remediasi (Parsial)`);
   }
   if (openCount > 0) {
     statusParts.push(`${openCount} vulnerabilities masih terbuka (Open) dan menunggu penanganan lebih lanjut`);
@@ -271,7 +271,7 @@ export function generateWorkbookPDF(workbook: WorkbookData): void {
     ["Total Vulnerabilities", workbook.totalVulnerabilities.toString()],
     ["Progress", `${workbook.progressPercentage}%`],
     ["Open", workbook.statusDistribution.Open.toString()],
-    ["In Progress", workbook.statusDistribution["In Progress"].toString()],
+    ["Parsial", workbook.statusDistribution["Parsial"].toString()],
     ["Closed", workbook.statusDistribution.Closed.toString()],
   ];
 
@@ -429,7 +429,7 @@ export function generateWorkbookPDF(workbook: WorkbookData): void {
 
   const statusData = [
     ["Open", workbook.statusDistribution.Open.toString()],
-    ["In Progress", workbook.statusDistribution["In Progress"].toString()],
+    ["Parsial", workbook.statusDistribution["Parsial"].toString()],
     ["Closed", workbook.statusDistribution.Closed.toString()],
   ];
 

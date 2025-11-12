@@ -58,7 +58,31 @@ export function parseOWASPVector(vectorString: string): OWASPRiskVector | null {
 }
 
 /**
- * Hitung risk level berdasarkan OWASP vector atau initial ratings
+ * Convert risk value string ke RiskLevel
+ * RI = Risiko (hasil matrix KI x DI)
+ * RR = Risiko Residual (hasil matrix KR x DR)
+ */
+function convertRiskValueToLevel(riskValue?: string): RiskLevel {
+  if (!riskValue) return "Low";
+  
+  const normalized = riskValue.toLowerCase().trim();
+  
+  if (normalized.includes("kritis") || normalized.includes("critical")) {
+    return "Critical";
+  }
+  if (normalized.includes("tinggi") || normalized.includes("high")) {
+    return "High";
+  }
+  if (normalized.includes("sedang") || normalized.includes("medium")) {
+    return "Medium";
+  }
+  return "Low";
+}
+
+/**
+ * Hitung risk level berdasarkan OWASP vector atau risk value
+ * Jika ada vector, gunakan untuk kalkulasi
+ * Jika tidak, gunakan risk value langsung (RI atau RR)
  */
 export function calculateRiskLevel(
   vector?: OWASPRiskVector,
@@ -82,16 +106,56 @@ export function calculateRiskLevel(
     return "Low";
   }
 
-  // Fallback ke initial ratings (KI, DI, RI)
-  const ratings = [ki, di, ri].filter(Boolean);
-  if (ratings.length === 0) return "Low";
+  // Jika tidak ada vector, gunakan RI langsung (RI = hasil matrix KI x DI)
+  // RI sudah merupakan risk level hasil perhitungan matrix
+  if (ri) {
+    return convertRiskValueToLevel(ri);
+  }
 
-  const hasTinggi = ratings.some(r => r?.toLowerCase().includes("tinggi"));
-  const hasSedang = ratings.some(r => r?.toLowerCase().includes("sedang"));
-  const hasRendah = ratings.some(r => r?.toLowerCase().includes("rendah"));
-
-  if (hasTinggi) return "High";
-  if (hasSedang) return "Medium";
+  // Fallback: jika tidak ada RI, coba hitung dari KI x DI (matrix)
+  // Tapi seharusnya RI sudah ada, ini hanya untuk backward compatibility
+  const kiValue = ki?.toLowerCase().trim() || "";
+  const diValue = di?.toLowerCase().trim() || "";
+  
+  // Risk Matrix: Kemungkinan (KI) x Dampak (DI) = Risiko (RI)
+  // Matrix logic:
+  // Kritis x Kritis = Kritis
+  // Kritis x Tinggi = Kritis
+  // Kritis x Sedang = Tinggi
+  // Kritis x Rendah = Sedang
+  // Tinggi x Tinggi = Tinggi
+  // Tinggi x Sedang = Sedang
+  // Tinggi x Rendah = Rendah
+  // Sedang x Sedang = Sedang
+  // Sedang x Rendah = Rendah
+  // Rendah x Rendah = Rendah
+  
+  const getKemungkinanScore = (val: string): number => {
+    if (val.includes("kritis") || val.includes("critical")) return 4;
+    if (val.includes("tinggi") || val.includes("high")) return 3;
+    if (val.includes("sedang") || val.includes("medium")) return 2;
+    return 1;
+  };
+  
+  const getDampakScore = (val: string): number => {
+    if (val.includes("kritis") || val.includes("critical")) return 4;
+    if (val.includes("tinggi") || val.includes("high")) return 3;
+    if (val.includes("sedang") || val.includes("medium")) return 2;
+    return 1;
+  };
+  
+  if (kiValue && diValue) {
+    const kiScore = getKemungkinanScore(kiValue);
+    const diScore = getDampakScore(diValue);
+    const riskScore = kiScore * diScore;
+    
+    // Risk score mapping: 16=Kritis, 12=Tinggi, 9=Sedang, 6=Sedang, 4=Rendah, 3=Rendah, 2=Rendah, 1=Rendah
+    if (riskScore >= 12) return "Critical";
+    if (riskScore >= 9) return "High";
+    if (riskScore >= 4) return "Medium";
+    return "Low";
+  }
+  
   return "Low";
 }
 
@@ -239,13 +303,16 @@ function parseCSVRow(row: Record<string, string>, index: number): Vulnerability 
     };
 
     // Calculate risk levels
-    // Calculated risk = dari OWASP vector atau KI/DI/RI (whichever available)
-    vulnerability.calculatedRiskLevel = calculateRiskLevel(vector, ki, di, ri);
+    // RI = Risiko Inheren (hasil matrix KI x DI) = Risk Level
+    // RR = Risiko Residual (hasil matrix KR x DR) = Risk Level setelah retest
     
-    // Risk Inheren = SELALU dari KI, DI, RI (initial ratings)
-    vulnerability.initialRiskLevel = calculateRiskLevel(undefined, ki, di, ri);
+    // Risk Level = langsung dari RI (RI sudah hasil matrix KI x DI)
+    vulnerability.calculatedRiskLevel = convertRiskValueToLevel(ri);
     
-    // Risk Residual = dari KR, DR, RR (retest ratings) - hanya jika ada nilai
+    // Risk Inheren = langsung dari RI (RI sudah hasil matrix KI x DI)
+    vulnerability.initialRiskLevel = convertRiskValueToLevel(ri);
+    
+    // Risk Residual = langsung dari RR (RR sudah hasil matrix KR x DR)
     // Jika KR/DR/RR = "None" atau kosong, berarti belum ada retest
     const hasResidualData = vulnerability.kr && 
                             vulnerability.dr && 
@@ -255,12 +322,8 @@ function parseCSVRow(row: Record<string, string>, index: number): Vulnerability 
                             vulnerability.rr.toLowerCase() !== "none";
     
     if (hasResidualData) {
-      vulnerability.retestRiskLevel = calculateRiskLevel(
-        undefined,
-        vulnerability.kr,
-        vulnerability.dr,
-        vulnerability.rr
-      );
+      // RR sudah merupakan risk level hasil matrix KR x DR
+      vulnerability.retestRiskLevel = convertRiskValueToLevel(vulnerability.rr);
       
       // Calculate risk reduction percentage
       if (vulnerability.initialRiskLevel && vulnerability.retestRiskLevel) {

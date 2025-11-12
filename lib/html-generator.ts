@@ -26,7 +26,7 @@ export function generateWorkbookHTML(workbook: WorkbookData): void {
 function generateHTMLContent(workbook: WorkbookData): string {
   const criticalHighCount = (workbook.riskDistribution.Critical || 0) + (workbook.riskDistribution.High || 0);
   const closedCount = workbook.statusDistribution.Closed || 0;
-  const inProgressCount = workbook.statusDistribution["In Progress"] || 0;
+  const inProgressCount = workbook.statusDistribution["Parsial"] || 0;
   const openCount = workbook.statusDistribution.Open || 0;
 
   return `<!DOCTYPE html>
@@ -245,7 +245,7 @@ function generateHTMLContent(workbook: WorkbookData): string {
         <h3 style="font-size: 16px; margin-bottom: 10px;">Status Mitigasi</h3>
         <div class="risk-badges">
           ${openCount > 0 ? `<span class="badge" style="background-color: #dc2626;">Terbuka: ${openCount}</span>` : ''}
-          ${inProgressCount > 0 ? `<span class="badge" style="background-color: #f59e0b;">Dalam Proses: ${inProgressCount}</span>` : ''}
+          ${inProgressCount > 0 ? `<span class="badge" style="background-color: #f59e0b;">Parsial: ${inProgressCount}</span>` : ''}
           ${closedCount > 0 ? `<span class="badge" style="background-color: #10b981;">Ditutup: ${closedCount}</span>` : ''}
         </div>
       </div>

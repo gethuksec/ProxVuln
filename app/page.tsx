@@ -61,7 +61,7 @@ export default function HomePage() {
                 <TemplateDownloadButton type="excel" />
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-3">
-                Template berisi contoh 1 temuan dengan format yang benar. Silakan gunakan sebagai referensi untuk mengisi data vulnerability Anda.
+                Template berisi contoh 10 temuan OWASP Top 10 dengan format yang benar. Silakan gunakan sebagai referensi untuk mengisi data vulnerability Anda.
               </p>
             </div>
             

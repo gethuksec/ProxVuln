@@ -148,18 +148,18 @@ export default function ExecutiveSummary({ workbook }: ExecutiveSummaryProps) {
                 <p className="text-xs text-slate-600 dark:text-slate-400">Terbuka</p>
               </div>
             )}
-            {workbook.statusDistribution["In Progress"] > 0 && (
+            {workbook.statusDistribution["Parsial"] > 0 && (
               <div 
                 className="text-center p-3 rounded flex-1 min-w-[120px]"
-                style={{ backgroundColor: getStatusBgColor("in progress") }}
+                style={{ backgroundColor: getStatusBgColor("parsial") }}
               >
                 <p 
                   className="text-2xl font-bold"
-                  style={{ color: getStatusColor("in progress") }}
+                  style={{ color: getStatusColor("parsial") }}
                 >
-                  {workbook.statusDistribution["In Progress"]}
+                  {workbook.statusDistribution["Parsial"]}
                 </p>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Dalam Proses</p>
+                <p className="text-xs text-slate-600 dark:text-slate-400">Parsial</p>
               </div>
             )}
             {workbook.statusDistribution.Closed > 0 && (

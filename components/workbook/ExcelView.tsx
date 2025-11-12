@@ -120,33 +120,15 @@ export default function ExcelView({ vulnerabilities }: ExcelViewProps) {
                 <th className="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-slate-700">
                   PJ
                 </th>
-                <th className="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-slate-700">
-                  Tenggat
-                </th>
-                <th className="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-slate-700">
-                  KI
-                </th>
-                <th className="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-slate-700">
-                  DI
-                </th>
-                <th className="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-slate-700">
-                  RI
-                </th>
-                <th className="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-slate-700">
-                  KR
-                </th>
-                <th className="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-300 border-r border-slate-200 dark:border-slate-700">
-                  DR
-                </th>
                 <th className="px-3 py-2 text-left font-semibold text-slate-700 dark:text-slate-300">
-                  RR
+                  Tenggat
                 </th>
               </tr>
             </thead>
             <tbody>
               {filteredData.length === 0 ? (
                 <tr>
-                  <td colSpan={13} className="px-3 py-8 text-center text-slate-500">
+                  <td colSpan={7} className="px-3 py-8 text-center text-slate-500">
                     Tidak ada data
                   </td>
                 </tr>
@@ -195,62 +177,8 @@ export default function ExcelView({ vulnerabilities }: ExcelViewProps) {
                       <td className="px-3 py-2 border-r border-slate-200 dark:border-slate-700">
                         {vuln.pj || "-"}
                       </td>
-                      <td className="px-3 py-2 border-r border-slate-200 dark:border-slate-700">
+                      <td className="px-3 py-2">
                         {vuln.tenggat || "-"}
-                      </td>
-                      <td 
-                        className="px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-center font-medium"
-                        style={{
-                          backgroundColor: getRiskValueBgColor(vuln.ki),
-                          color: getRiskValueColor(vuln.ki),
-                        }}
-                      >
-                        {vuln.ki || "-"}
-                      </td>
-                      <td 
-                        className="px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-center font-medium"
-                        style={{
-                          backgroundColor: getRiskValueBgColor(vuln.di),
-                          color: getRiskValueColor(vuln.di),
-                        }}
-                      >
-                        {vuln.di || "-"}
-                      </td>
-                      <td 
-                        className="px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-center font-medium"
-                        style={{
-                          backgroundColor: getRiskValueBgColor(vuln.ri),
-                          color: getRiskValueColor(vuln.ri),
-                        }}
-                      >
-                        {vuln.ri || "-"}
-                      </td>
-                      <td 
-                        className="px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-center font-medium"
-                        style={{
-                          backgroundColor: getRiskValueBgColor(vuln.kr),
-                          color: getRiskValueColor(vuln.kr),
-                        }}
-                      >
-                        {vuln.kr || "-"}
-                      </td>
-                      <td 
-                        className="px-3 py-2 border-r border-slate-200 dark:border-slate-700 text-center font-medium"
-                        style={{
-                          backgroundColor: getRiskValueBgColor(vuln.dr),
-                          color: getRiskValueColor(vuln.dr),
-                        }}
-                      >
-                        {vuln.dr || "-"}
-                      </td>
-                      <td 
-                        className="px-3 py-2 text-center font-medium"
-                        style={{
-                          backgroundColor: getRiskValueBgColor(vuln.rr),
-                          color: getRiskValueColor(vuln.rr),
-                        }}
-                      >
-                        {vuln.rr || "-"}
                       </td>
                     </tr>
                   );

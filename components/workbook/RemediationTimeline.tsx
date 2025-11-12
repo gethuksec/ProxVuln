@@ -23,6 +23,8 @@ export default function RemediationTimeline({ vulnerabilities }: RemediationTime
     ),
     inProgress: vulnerabilities.filter(
       (v) =>
+        (v.retest1 || v.statusMitigasi)?.toLowerCase().includes("parsial") ||
+        (v.retest1 || v.statusMitigasi)?.toLowerCase().includes("partial") ||
         (v.retest1 || v.statusMitigasi)?.toLowerCase().includes("proses") ||
         (v.retest1 || v.statusMitigasi)?.toLowerCase().includes("progress")
     ),
@@ -42,7 +44,7 @@ export default function RemediationTimeline({ vulnerabilities }: RemediationTime
       bgColor: "bg-red-50 dark:bg-red-950",
     },
     {
-      title: "Mitigation In Progress",
+      title: "Mitigation Parsial",
       count: byStatus.inProgress.length,
       icon: Clock,
       color: "text-amber-600",

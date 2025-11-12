@@ -50,7 +50,7 @@ export function formatStatus(status: string): string {
   const statusLower = status.toLowerCase().trim();
   if (statusLower === "closed") return "Ditutup";
   if (statusLower === "open") return "Terbuka";
-  if (statusLower.includes("proses") || statusLower.includes("progress")) return "Dalam Proses";
+  if (statusLower.includes("parsial") || statusLower.includes("partial") || statusLower.includes("proses") || statusLower.includes("progress")) return "Parsial";
   return status;
 }
 
@@ -64,7 +64,7 @@ export function getStatusColor(status: string): string {
   const statusLower = status.toLowerCase().trim();
   if (statusLower === "closed" || statusLower === "ditutup") return "#10B981"; // Green
   if (statusLower === "open" || statusLower === "terbuka") return "#DC2626"; // Red
-  if (statusLower.includes("proses") || statusLower.includes("progress")) return "#F59E0B"; // Amber
+  if (statusLower.includes("parsial") || statusLower.includes("partial") || statusLower.includes("proses") || statusLower.includes("progress")) return "#F59E0B"; // Amber
   return "#6B7280"; // Gray default
 }
 
@@ -75,7 +75,7 @@ export function getStatusBgColor(status: string): string {
   const statusLower = status.toLowerCase().trim();
   if (statusLower === "closed" || statusLower === "ditutup") return "#D1FAE5"; // Light green
   if (statusLower === "open" || statusLower === "terbuka") return "#FEE2E2"; // Light red
-  if (statusLower.includes("proses") || statusLower.includes("progress")) return "#FEF3C7"; // Light amber
+  if (statusLower.includes("parsial") || statusLower.includes("partial") || statusLower.includes("proses") || statusLower.includes("progress")) return "#FEF3C7"; // Light amber
   return "#F3F4F6"; // Light gray
 }
 
