@@ -366,7 +366,6 @@ export function parseCSVFile(
       delimiter: ";",
       skipEmptyLines: false, // Handle manually
       transformHeader: (header) => normalizeHeaderName(header),
-      quotes: true,
       quoteChar: '"',
       escapeChar: '"',
       newline: "\n",
