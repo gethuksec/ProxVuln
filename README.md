@@ -8,8 +8,8 @@
 
 ```bash
 # Clone & Install
-git clone <repository-url>
-cd worksheet-vulnerability-management
+git clone https://github.com/gethuksec/ProxVuln.git
+cd ProxVuln
 npm install
 
 # Run
